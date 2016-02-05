@@ -70,11 +70,13 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSAssert(self.tableView.style == UITableViewStyleGrouped, @"Use grouped UITableView layout so we get separator above first cell and below last cell without having to implement any special logic");
 
-    self.tableView.estimatedRowHeight = 52.0;
-    self.tableView.rowHeight          = UITableViewAutomaticDimension;
-
     _footerDataSource               = [[WMFArticleFooterMenuDataSource alloc] initWithArticle:self.article];
     self.footerDataSource.tableView = self.tableView;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    // HAX: (sorta) setting self.tableView.rowHeight = UITableViewAutomaticDimension was causing some strange constraint breakage. Using "tableView:heightForRowAtIndexPath:" for fixed height of 60 works fine for now.
+    return 60;
 }
 
 #pragma mark - UITableViewDelegate
